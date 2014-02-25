@@ -1,0 +1,503 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{comment}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\newtheorem{definition}{Definition}
+\newtheorem{property}{Property}
+\newtheorem{example}{Example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Algorithms and pseudo code
+\usepackage{verbatim}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+
+% Graphics and display
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{enumerate}
+\usepackage{url}
+\usepackage{multirow}
+
+% Math symbols and environments
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{stmaryrd} % \varcurlyvee
+
+
+\usepackage{calc}%#%
+
+\date{ }
+% TikZ
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+
+\definecolor{myyellow}{RGB}{255,255,150}
+\definecolor{mylavender}{RGB}{125,249,255}
+\definecolor{mygreen}{RGB}{144,238,14}
+\definecolor{myred}{RGB}{255,0,0}
+
+\newcommand\mytext[3][\scriptsize]{#2\\#1 #3}
+\newcommand\mynode[4][]{%
+  \node[mynode,#1,text width=\the\dimexpr#2cm] (#3) {\mytext{#3}{#4}}; 
+}
+\newcommand\mynot[4][]{%
+  \node[mynot,#1,text width=\the\dimexpr#2cm] (#3) {\mytext{#3}{#4}}; 
+}
+
+\setcounter{secnumdepth}{4}
+
+%%%%%%%%%%%%%%%%
+%%%% Macros %%%%
+%%%%%%%%%%%%%%%%
+
+%%% Math
+\newcommand{\nat}{\mathbb{N}}   % Natural numbers
+\newcommand{\rat}{\mathbb{Q}}   % Rational numbers
+\newcommand{\real}{\mathbb{R}}  % Real numbers
+\newcommand{\runit}{[0, 1]}    % The real unit interval
+
+
+% = with "hip." on the top, useful for indicating where a hypothesis comes in
+\newcommand{\heq}{\stackrel{\text{\fontsize{3pt}{3pt}\selectfont hip.}}{=}}
+% = because of the de Morgan laws.
+\newcommand{\dmeq}{\stackrel{\text{\tiny{dM}}}{=}}
+
+
+%%% Sets
+\newcommand{\args}{\mathcal{A}} % Set of all arguments
+\newcommand{\att}{\mathcal{R}}  % Set of all attacks
+\newcommand{\valueset}{L}
+
+%%% Votes on arguments
+\newcommand{\varg}{V_{\args}}   % Function giving votes on arguments
+\newcommand{\vargpro}[1]{\varg^+\left(#1\right)} % Pro votes on arguments
+\newcommand{\vargcon}[1]{\varg^-\left(#1\right)} % Con votes on arguments
+
+%%% Votes on attacks
+\newcommand{\vatt}{V_{\att}}   % Function giving votes on attacks
+\newcommand{\vattpro}[1]{\vatt^+\left(#1\right)} % Pro votes on attacks
+\newcommand{\vattcon}[1]{\vatt^-\left(#1\right)} % Con votes on attacks
+
+%%% Attack relations
+% Attackers of a given argument
+\newcommand{\attackers}[1]{\att^\text{-}\left(#1\right)} 
+% Attackers of a given argument for the alternative framework F'
+\newcommand{\altattackers}[1]{\att^{\prime\text{-}}\left(#1\right)}
+% Ancestors of given argument according to the attack relation
+\newcommand{\ancestors}[1]{\att^*\left(#1\right)} 
+
+%%% Frameworks
+\newcommand{\safid}{F}               % A single SAF, given by identifier
+\newcommand{\safset}{\mathcal{F}}    % Set of all SAFs
+
+\newcommand{\saf}{\safid = \safbody} % Framework id and respective tuple
+\newcommand{\safbody}{\langle \args, \att, \varg, \vatt \rangle} % SAF tuple
+\newcommand{\oldsaf}{\safid = \oldsafbody} % Ex Framework id and respective tuple
+\newcommand{\oldsafbody}{\langle \args, \att, V \rangle} % old SAF tuple
+% Alternative framework, same as \safbody but with ' everywhere ;)
+\newcommand{\altsafbody}{\langle \args', \att', \varg', \vatt' \rangle} 
+
+%%% Semantics
+\newcommand{\semid}{\mathcal{S}}        % Semantic framework identifier
+% Semantic framework tuple
+\newcommand{\sembody}{\left\langle \valueset,\SAFand_1, \SAFand_2,\SAFor,\lnot,\tau \right\rangle}
+\newcommand{\semdef}{\semid = \sembody}     % Semantic framework id and tuple
+\newcommand{\semprod}[1]{\semid^\cdot_{#1}} % Product semantic framework
+\newcommand{\semsub}{\semid^\text{-}}       % Subtraction semantic framework
+\newcommand{\semmax}{\semid^\text{max}}     % Max semantic framework
+
+\newcommand{\SAFand}{\curlywedge}     % Logical and for SAF equations 
+\newcommand{\SAFor}{\curlyvee}        % Logical or for SAF equations
+\DeclareMathOperator*{\SAFOr}{\bigcurlyvee} % Big or notation, works as \sum
+                             %\varcurlyvee also works, but is smaller
+\DeclareMathOperator*{\SAFAnd}{\bigcurlywedge} % Big and notation, works as \sum
+
+\newcommand{\modelset}{\mathcal{M}}   % Set of all models
+
+
+%#% old commands
+\newcommand{\afit}{\textit{AF}}
+\newcommand{\af}{\afit = \langle \args, \att \rangle}
+\newcommand{\vote}{V}
+\newcommand{\sem}{\mathcal{S}}
+
+\newcommand{\ssv}{\mathcal{V}}
+\newcommand{\tv}{\mathcal{T}}
+\newcommand{\pv}{\mathcal{P}}
+\newcommand{\xv}{\mathcal{X}}
+\newcommand{\ev}{\mathcal{E}}
+
+\newcommand{\safit}{F}
+
+\newcommand{\tupd}{\curlywedge}
+\newcommand{\tatt}{\curlyvee}
+\newcommand{\Tatt}{\varcurlyvee}
+
+\newcommand{\argarray}{\{x_1, ..., x_n\}}
+
+\newcommand{\voteset}{\mathcal{V}}
+\newcommand{\vpro}{\vote^+}
+\newcommand{\vcon}{\vote^-}
+
+%%% Mappings
+\newcommand{\mapping}{\Phi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\title{Report on ongoing research}
+
+\maketitle
+
+This document is an ongoing work regarding the exercise of realizing some of the abstract ideas and notions we discussed in the \emph{BTC-collaboration} document.
+
+
+
+
+
+\section{Social Behavior}
+
+Ultimately we strive for our system to satisfy the following property:
+
+\begin{property}
+A user of the system never has an incentive to change his/her vote.
+\end{property}
+
+However that's not the case for the time being. Before going into formal definitions, with the following simple example we show that the property does not hold for ESAFs.
+
+{\color{red}   $\dagger$You may jump to the next line colored in red to skip the example entirely.}
+
+\begin{example}
+Assume the fictitious example of a framework with three arguments as depicted in Figure \ref{fig:attacksOnAttacks}. Let $\af$ be an Abstract Argumentation Framework and $\oldsaf$ be a Social Argumentation Framework. Let  $\args = \{a, b, c\}$, $\att = \{(b,a), (c,b)\}$.
+Suppose that there is a user utilizing the system, that has five votes to spare in her disposal, and her only objective is increasing argument $a$'s value as much as possible
+
+As can be observed from the values in Table \ref{table:aa}, it makes more sense for the user not to take the straight forward approach and use all of the votes s/he possess on argument $a$. But rather take an in direct approach and use them on argument $c$. Table 1 shows that $a$'s social strength benefits greater from the increase in its attacker's attacker's social support.
+
+%Example of Improved Semantics
+\input{./graphs/aa.tex}
+
+\end{example}
+
+{\color{red}   Thus the example shows in our system, in some settings users indeed have incentive to sway away from their original preferences and vote for other arguments(and/or attack relations).} This makes it interesting to investigate and figure out potential behavioral patterns of the users.
+
+In the light of this motivation, we first try to construct  the formation. Again we try to define the model as generic as possible, so that later we have the flexibility of tailoring the system for distinctive settings. The model takes some inspiration from other work that mainly dwell in automated task planning and coalition formation.%! ikisi icin de referanslar
+
+\subsection{Social Behavior System}
+Let us start by discussing the elements of the system. Firstly several users $\mathcal{U} = {u_1, ..., u_n}$ are involved in the system. 
+
+The system composes several moves  $\mathcal{M} = {m_1, ..., m_n}$ that will be carried out by users. Foreseeable list of moves include  introducing an argument to the system, introducing an attack relation to the system, voting on existing arguments(and/or attack relations).
+
+Each user $u_i \in \mathcal{U}$ is supposed to have a vector of non-negative capabilities $\mathcal{B} = <b_1^i, ..., b_r^i>$. A capability $b_j^i$ represents the capacity of the user $u_i$ regarding the move $m_j$ .  One other way of imagining this vector is a collection of budgets. For instance $m_2$ might stand for the action of voting on an argument, and $b_2^5$ might correspond to the number of votes that user $u_5$ holds that could be user for voting on the existing arguments of the system (Henceforth with respect this modeling $|\mathcal{M}| = |\mathcal{B}^i|$ for any user $u_i \in \mathcal{U}$, but of course for some $b_j^i \in \mathcal{B}^i$, $b_j^i$ might equal to $0$).
+
+
+Moreover each user $u_i \in \mathcal{U}$ possesses a vector called core, $\mathcal{C}^i = <c_1^i, ..., c_r^i>$. There are multiple possibilities in defining the core. Firstly it could be set of desired entities from the framework, i.e. a subset of the argument set $\mathcal{A}$ (and/or the attack relations set  $\mathcal{R}$). Moreover this set could be substituted by a preference vector. Thus the elements of the core would have a relative hierarchical order between themselves, and this would guide the choices of the user when selecting a move over the rest. 
+
+One more possibility, which a tad more complex is that $\mathcal{C}$ could stand for a desired state of the system, and each $c_i \in \mathcal{C}$ depicts a part of the state. For instance a user might yearn for a state where an argument  $a_i \in \mathcal{A}$ enjoys a social strength higher than 0.7, and an attack relation $(a_m, a_n) \in \mathcal{R}$  to command a social support lower than 0.3,  and an argument $a_j \in \mathcal{A}$ to be attacked by at least five arguments. Such a desired state can be defined via a core with three elements, $\mathcal{C} = <c_1, c_2, c_3>$, where each element correspond to a distinctive one of the three concepts. Again just as stated in the previous discussion, this vector might be defined as preference vector(accompanied by the definition of the necessary operator).
+
+We combine the notions discussed above to construct the formal definition of the envisioned system:
+
+\begin{definition}\textbf{[Social Behavior System]}
+
+A Social Behavior System(SBS) is a triple $<F, M, U>$ such that:
+
+\begin{itemize}
+\item $\mathcal{F}$ is an ESAF.
+\item  $\mathcal{M} = \{m_1, ..., m_k\}$ is set of moves allowed by the system.
+\item $\mathcal{U} = \{u_1, ..., u_l\} $ is a set of users, where $\forall u_i \in U$ consists of:
+\begin{itemize}
+\item a vector $\mathcal{C}^i = <c_1^i, ..., c_r^i>$ depicting its core.
+\item a vector $\mathcal{B}^i = <b_1^i, ..., b_t^i>$ of its budgets corresponding each move. 
+\end{itemize}
+\end{itemize}
+
+\end{definition}
+
+\subsection{The concept of Coalition}
+
+In the light of the model, we believe that there are multiple reasons for the users to cooperate under certain settings. 
+\begin{itemize}
+\item Firstly the shared elements in the cores of the distinct arguments points to an intrinsic motivation for cooperation. 
+\item Moreover, recall that we had presented a candidate setting for the notion of core   where the every $c_i \in \mathcal{C}$ corresponds to a desired state of some part of the framework. If a similar approach is adopted,  some arbitrary sub-budget  $b_j^i$ of a user $u_i$ might not prove to be enough for its corresponding element of the core. In such scenarios, we expect the user to look for other users in the hopes of forming a \emph{coalition} to realize such goals which can't be achieved by their own.   
+\item Lastly some, negotiation procedures may be defined for the model in order to mimic possible strategic partnerships that may emerge amongst the human users. It may well be plausible for a user to sacrifice the most preferred strategy for the sake of initiating a coalition. 
+\end{itemize}
+
+In the light of the listed incentives, we follow with the formal definition of the concept of coalition in our system:
+
+\begin{definition}\textbf{[Coalition]}
+
+Let  $<F, M, U>$ be an SBS, a coalition is a tuple $<K, G>$ such that:
+
+\begin{itemize}
+\item $K \subseteq U$
+\item $\mathcal{G} = \{c_1,..., c_n\} \subseteq \bigcup_{x=1}^{m} C^{x} $, where  $u_i \in K$ for $i \in [1..m]$  % C^1 \cup ... \cup C^m
+\item $ K \Vvdash G$
+
+\end{itemize}
+
+Where K is the coalition group composed of a set of users, and G is the shared goal which consists of a subset of the union of the cores of the users that belong to the coalition group. $ K \Vvdash G$ denotes that goal $G$ might be realized via K.
+
+\end{definition}
+
+We must note that there are loose ends in the current state of the model, including the formal definitions. Most cases the reason is that, as mentioned above in detail, there are many candidates to be adopted for each concept in the model and the definitions have to be revised for some.
+
+For instance the meaning of the operator $\Vvdash$ from Definition 2 relies on the choice of $\mathcal{C}$. As an example, if we are to follow the first interpretation of $\mathcal{C}$ from Section 1.1 (where roughly, $c_j^i$ corresponds to an entity from the framework, for which the user $u_i$ desires to see an increase in its value), it's probably better to simply drop the operator from the definition. It's hard to talk about \emph{the satisfiability of a goal}, since even an episolon-increase results in a justified cooperation. 
+
+On the other hand if the last approach is adopted from the same section (where briefly, $c_j^i$ a part of a concrete desired state of the frame such as \emph{argument a's social strength being under 0.4}), then the operator indeed serves the intended purpose. This can be seen from its formal definition, which is as follows:
+
+\begin{definition}\textbf{[Achievement of a unified goal]}
+
+Let  $<F, M, U>$ be an SBS,  $K \subseteq U$ and $\mathcal{G} \subseteq \bigcup_{x=1}^{m} C^{x} $,  for $u_i \in K$, $i \in [1..m]$.
+
+The unified goal $\mathcal{G}$ can be achieved by the group $\mathcal{K}$ of users, denoted by $ K \Vvdash G$ , iff $\sum_{u_{i} \in \mathcal{K}} B^i \geq \sum_{c_{i} \in \mathcal{G}} c_i $ 
+
+%   iff $\forall 1 \leq j \leq r$,    %%amgoud'an ara parca
+
+\end{definition}
+
+
+
+In plain words, the unified goal is satisfiable if and only if the total budgets of the users in the coalition exceed the numerical value needed to satisfy all the cores in the goal. For the sake of simplicity, we suppose $c_i$s are numerical values. Recall that they can be complex sub-states of the framework, so normally these numerical values have to be calculated with a process preceding this check. Moreover we have taken a single-typed budget for all users, where as in sophisticated setting we have to take into consideration of sub-budgets for each move(in other words the definition works adopts a setting of the framework where there is a budget for only one move i.e. solely voting on arguments). 
+
+
+\subsection{Ongoing work}
+
+As stated earlier, in our system each user aims at maximizing its own utility, or wants to reach its desired state of the framework. When that is not achievable by its own means, each user would have an incentive to seek a coalition with some fellow user(s). 
+With this motivation, in this section we have regarded the notion of Social Behavior in our system as a problem of coalition formation that can be defined as a finite set N of users who should achieve a finite set M of cores. 
+
+Ideally, a coalition formation process can be envisioned as a two steps procedure:
+\begin{enumerate}
+\item Generating the coalition structures. The idea here is to form the coalitions such that
+users within a coalition should coordinate to decide on a set of (shared)cores and then achieve those, but
+those in different coalitions do not.
+\item Discussing these structures between the users in order to select the best ones which
+will be adopted.
+\end{enumerate}
+
+\subsubsection{Constructing coalition structures}
+
+In the current state of the proposed model, there is no elaborate methodology for constructing coalitions. We may create some simplistic procedures by introducing a few assumptions. For instance we may restrict the cardinality of core set C for each user to one, and state that the users with shared cores form coalitions. This indeed reminds the setting from Prof.Maudet's research, where each user can be easily attained to a party. However this time the number of parties is equal to the number of distinct cores in the system, rather than just two. However there are existing works which may help us in devising a more sophisticated framework in which users have the initiative of choosing the coalition to their liking amongst multiple possibilities. 
+
+Firstly in order to be able to make a choice between the candidate coalitions, users need some type of a preference mechanism. Perhaps this could be achieved by the introduction of a utility function for each user. Given a tuple consisting of a coalition $k_i$ and a user $u_j$,  the value function may return the benefit of attending to $k_i$ for $u_j$.
+
+Another interesting notion is conflicts between coalitions. Since the budgets are finite values, it might make sense to restrict each user to a single coalition, or a more complex setting could be letting users participate in multiple coalitions as long as they have some remaining budget. Moreover we have not associated a cost for forming coalition as in the first glance it does not seem to suit our system. However it's thought provoking as it leads to exciting notions like defeasibility. Briefly we may define a \emph{defeat} relation between coalitions, where a coalition defeats another when they share the same cores but the former possess a lower price for formation.
+
+If all these tasks are to be accomplished, then we may upgrade our coalition formation process to a more sophisticated level, consisting of the following four steps:
+
+\begin{enumerate}
+\item Constructing  all candidate coalitions.
+\item Defining preference and defensibility relations amongst the candidate coalitions.
+\item  Hierarchical ordering of the acceptable coalitions (for each user).
+\item Actual participation to a certain coalition (for each user).
+\end{enumerate}
+
+
+
+
+
+\section{Vectors meet Pro-arguments}
+
+In this section we try to integrate two distinct research topics that were previously discussed in the \emph{BTC-collaboration} document. We start with a brief recap of the two underlying ideas', possible approaches and their shortcomings.
+
+\subsection{Pro-arguments}
+
+We have been searching for possible methods of including the concept of support into our framework. One candidate extension to the existing framework is the addition of the notion of Pro-arguments, which are envisioned to be structural parts of the arguments they defend rather than stand alone arguments.
+
+Our first take is realizing them as solely additional reasons to make users vote on a particular argument, and leaving them out of the social voting process. This approach does not introduce any additional ways for exploitation of the system (via the users), however it could be seen as merely an enhancement on the GUI side.
+
+Second interpretation is adopting them with the same set of functionalities/privileges as the regular arguments in the framework. However this leaves the system vulnerable against harmful manipulation, i.e. the introduction of fallacious pro-arguments and associating them to existing arguments with strong social support.
+
+ One last realization method of the notion is taking a similar approach to value-based argumentation (as pointed out by Prof.Baroni in his last correspondence). Instead of implementing them as some stripped version of an argument, the idea is mimicking the value functions and making pro-arguments some value promoting relation amongst arguments.  However this method again gives way to the exact same problem as in the second approach.
+
+
+\subsection{Multi-Dimensional Representation} 
+
+Again in the previous document, we had discussed the fact that even though we have functions for unifying the social such as the one depicted in Definition 4, accompanied by a set of desired properties(P1, P2, P3), there is substantial room for improvement. 
+
+%% vector ozet
+
+
+\begin{definition}
+[Vote Aggregation]A vote aggregation function is any function
+$\tau:
+\mathbb{N} \times \mathbb{N} \times \mathbb{N}
+\rightarrow\lbrack0,1]$ such that $v_{max}\geq0$
+\[
+\tau\left(  v^{+},v^{-}, v_{max}\right)  =\left\{
+\begin{array}
+[c]{lll}
+0 &  & v_{max}=0\\
+\frac{v^{+}}{v^{+}+v^{-}+\frac{1}{v_{max}}} &  & \text{otherwise}
+\end{array}
+\right.
+\]
+
+where $v_{max}$ stands for the maximum number of votes for an argument in the system.
+\end{definition}
+
+\begin{itemize}
+\item[P1] \textit{No argument enjoys perfect Social Support.}
+\item[P2] \textit{If the value of the ratio of positive votes to the total amount of votes is higher for an argument $a$ than an argument $b$; $a$'s social support value exceeds the social support of $b$.}
+\item[P3] \textit{When the ratios are equal, the function should return a higher social support value for the one with the higher number of total votes.}
+\end{itemize}
+
+Firstly, the existing function's result does not reflect the total number of votes casted on a particular argument to a decent extent. Moreover since the function boils all the inputs to a single value prior to the model evaluation, we don't have much flexibility in the upcoming stages of the computation.
+
+A multi-dimensional vector representation of an argument lets one tailor operations for each distinct dimension, and then merge them at a phase upto the designer's liking. Since ESAFs assumes is no restriction on the labeling set where arguments take their values from, arguments can be maintained as vectors all the way including the model evaluation phase, and the final result might be displayed by some GUI choice depicting all arguments' vector representations. 
+
+\subsection{Marrying the two concepts}
+
+In the light of the aforementioned motivations, we try to propose a candidate vector representation. 
+
+The first step is defining the dimensions. In one of the earlier \emph{BTC-collaboration} document's iterations we had briefly discussed the possible pitfalls of choosing hybrid dimensions - dimensions consisting of multiple variables, and some of these variables appearing in more than one dimension. This problem is inspected in more detail in the last subsection.
+
+The obvious candidates are the positive and the negative number of votes an argument has received. Moreover in Section 2.1 we have motivated the extension of our system via pro-arguments, but the discussed methods all had their share bit of shortcomings. Here we try to incorporate them to the system by defining them as the third dimension.
+
+Firstly we extend the framework as follows:
+
+\begin{definition}[Social argumentation frameworks]
+A social argumentation framework is a 6-tuple $\langle \args, \mathcal{P}, \att, \mathcal{M}_P,  \varg, \mathcal{V}_P \rangle$, where
+\begin{itemize}
+  \item $\mathcal{A}$ is the set of arguments,
+  \item  $\mathcal{P}$ is the set of pro-arguments,
+  %\item $\args \subseteq \mathcal{B} \times 2^{\mathcal{P}}$  is the set of arguments,
+  \item $\att \subseteq \args \times \args$ is a binary attack relation between arguments,
+ \item $\mathcal{M}_P: 2^{\mathcal{P}} \to \args$ is a mapping from a set of pro-argument to an argument
+  \item $\varg : \args \to \nat \times \nat$ stores the crowd's pro and con votes for each argument.
+%  \item $\vatt : \att \to \nat \times \nat$ stores the crowd's pro and con votes for each attack.
+\item $\mathcal{V}_P : \mathcal{P} \to \nat \times \nat$ stores the crowd's pro and con votes for each pro-argument.
+%\item Rest of the notions follow the ESAF definition given in \cite{eml2013esaf}. 
+
+(We omit the social voting on attack relations for simplicity.)
+\end{itemize}
+\end{definition}
+
+Moreover assume we have an aggregation function that given a set of pro-arguments, return a reel value via aggregating each pro-argument's positive and negative votes by an arbitrary method:  $\mathcal{F}: 2^{\mathcal{P}} \to \nat$
+
+Then we may represent each argument $a_i \in \args$ as a vector:
+
+ $a_i = < v_{i}^+,  v_{i}^-, \mathcal{F}(\mathcal{M}_{p}^{-}(a_{i}))>$.
+
+
+Under this topic, current efforts are invested in finding a concrete complete framework utilizing vector operations and leaving the end result (after model evaluation) in vector form.
+
+
+
+\subsection{Hybrid dimensions}
+
+As discussed above, we may also define dimensions as the composition of variables. Here the idea is trying to conceptualize the generic steps that would guide us to a concrete methodology\footnote{For the sake of brevity, we do quite a bit of "hand-waving" in our formal definitions, where the skipped notions are expected to be sufficiently clear}, and meanwhile eliminate the shortcoming of the existing aggregation function in taking into account the total number of received votes on an argument and lastly demonstrating on a numerical example.
+
+We know that in ESAFs, the process of evaluating social support already gives us a great taste for the relative measure of  of positive($v^{+}$) and negative($v^{-}$) votes of $a$. So here for simplicity, we choose a bi-dimensional vector representation in the form of $ a = [a_{x}, a_{y}]$ for each argument, where $a_{x}$ stands for the magnitude of total votes casted on $a$, and $a_{y}$ is computed by boiling down two separate dimensions (i.e.  the positive\&the negative votes) via utilizing the help of ESAF.
+
+ We take a different step from the original work and define the social support as a local valuation, somewhat close to the idea behind the work of Gradual Valuation. So the social support value of an argument $a$ is affected by the initial strength of $a$'s direct attackers, namely an attacking argument $b$'s own dimension values $b_{x}$ and $ b_{y}$. So all in all, to compute the social support of an argument $a$, we have to evaluated the values of it's dimensions separately via utilizing the votes casted on $a$, and then diminishing these values with the combined effect of $a$'s direct attackers on each dimensions. In a very closely related manner to the way the model equation is defined in the original work, at this point we may also come up with a generic function by utilizing similar algebraic operators:
+
+\begin{definition}[Social support]
+\label{def:ss}
+  Social support of an argument  $a \in \args$ is loosely $\tau(a) \triangleq \tau([a_{x}, a_{y}]) \triangleq [(\tau(a_{x})), (\tau(a_{y}))]$ where $\tau(a_{x})$ (respectively $\tau(a_{y})$):
+  $$\displaystyle \tau(a_x) = a_{x} \SAFand \lnot \SAFOr_{a_i \in \attackers{a}} (a_{i})_{x}$$
+\end{definition}
+
+Please note that unlike the model function of the original work, the above function is not a recursive one and thus it does not beget a fixed-point calculation.
+
+ Next we pursue by concretely instantiating our operators. The simplest idea would be summing the distinct dimensions of attacking arguments and then subtracting(i.e. adding the negated value of) the aggregated value from the argument of focus.  Since we would not expect $a_{x}$ (the total size dimension) to attain negative values, we will take the maximum of zero and the resulting value when adding the two values (We will follow a similar path for $a_{y}$ as well. At the first glance the motivation for preventing the value going below zero is not as intuitive as the other case, however as mentioned below this is the focus of the final discussion at the end of the chapter). This simple idea is captured by the following semantics:
+
+\begin{definition} [Simple Semantics]
+ 1) $x_{1}\curlywedge
+x_{2}=max(0, x_{1} +_{2})$, 2) $x_{1}\curlyvee x_{2}=x_{1}+x_{2}$, 3) $\lnot x_{1}=1-x_{1}$.
+\end{definition}
+
+And the resulting social support function(for single dimension):
+
+$$\displaystyle \tau(a_x) =   max (0, a_{x} - \sum_{a_i \in \attackers{a}}^{} (a_{i})_{x}   ) $$%a_{x} \SAFand \lnot \SAFOr_{a_i \in \attackers{a}} (a_{i})_{x}$$
+
+
+ Obviously this is a very naive approach, which simply equates adding the attacking vectors and then subtracting the combined value from the original argument with respect to the vector algebra. Before choosing the proper semantics, a very diligent investigation process should precede selection regarding figuring the desired properties of the operators. In our original work we choose to work with one specific triangular norm(product t-norm) and its dual t-conorm since they obey our desiderata. For instance T-norm conjunction between $\tau(a)$ and its attack should be a reduced value of $\tau(a)$, which is perfectly in accordance with argumentation intuitions: an attacked argument sees its strength reduced. 
+
+Since every t-norm is a function in the form of $T: [0, 1] \times [0, 1] \rightarrow [0, 1] $, to be able to utilize them we have to normalize the dimensions. However, that's very easy to achieve in our setting by simply dividing both of the dimensions for each argument via the term $(v^{+}_{max} + v^{-}_{max})$, which stands for the size magnitude of the argument with the maximum number of total votes in the system. Thus the only case of the existence of an argument enjoying \textit{perfect} social support is when an un-attacked argument has received the maximum number of total votes in the whole system, and all of those votes also have to be positive. As expected, such an argument's polar coordinates would be $(\sqrt 2, 45^{\circ})$ wrt. our definition.
+
+Anyhow, for the sake of a more comprehensive semantics, here we opt to work with another triangular norm, the Hamacher product t-norm for the conjunctive binary operation(and respectively with its t-conorm with respect to the disjunctive operator). The newly defined semantics is as follows:
+
+\begin{definition} [Hamacher Semantics]
+% 1) $x_{1}\curlywedge
+%x_{2}=max(0, x_{1} +_{2})$, 2) $x_{1}\curlyvee x_{2}=x_{1}+x_{2}$, 3) $\lnot x_{1}=1-x_{1}$.
+
+\[  x_{1}\curlywedge x_{2}= \left\{ 
+  \begin{array}{l l}
+    0 & \quad ( x_{1},  x_{2}) = (0, 0)\\
+    \frac{ x_{1}\cdot  x_{2}}{ x_{1}+ x_{2}- x_{1}\cdot  x_{2}} & \quad  ( x_{1},  x_{2}) \neq (0, 0)
+  \end{array} \right.\]
+
+\[  x_{1}\curlyvee x_{2}= \left\{ 
+  \begin{array}{l l}
+    1 & \quad ( x_{1},  x_{2}) = (1, 1)\\
+    \frac{x_{1}+  x_{2} - 2 \cdot x_{1} \cdot x_{2}}{1- x_{1}\cdot  x_{2}} & \quad  ( x_{1},  x_{2}) \neq (1, 1)
+  \end{array} \right.\]
+
+\begin{center}
+$\lnot x_{1}=1-x_{1}$
+\end{center}
+\end{definition}
+
+Hamacher product is a strict Archimedean t-norm with some really interesting properties for our application. For instance, very crudely in order to compute a high outcome it requires both of the parameters to be relatively high(inherits from archimedean property). As mentioned in the beginning, the whole motivation behind this line of research is being able to assure that total vote numbers also play an important role in the final outcome in addition to the relative ratio. Thus this kind of operator family, roughly spoken where  one parameter does not cover for the other terms in conjunction,  can be highly appealing. Moreover it differentiates small changes near zero much better than the Product T-norm, as mentioned earlier which is the choice of binary operator in our original work, which appears to normalise values in that area of its domain.
+
+Let us see investigate a numerical example, as promised in the beginning, in order to demonstrate the applicability of the method.
+
+
+
+\input{./graphs/3luESAF.tex}
+
+\renewcommand{\tabcolsep}{0.3cm}
+\begin{table}[ht]
+  \caption{Model of the Social Abstract Argumentation Framework considering: a) social support only; b) ESAF; c) Vector representation;\\}
+  \centering % used for centering table
+\begin{tabular}{c c c c c} % centered columns (6 columns)
+\hline\hline %inserts double horizontal lines
+Argument &  Fig. a & Fig. b & Fig. c & \\ [0.7ex] % inserts table 
+%heading
+\hline % inserts single horizontal line
+a & 0.50 & 0.35 & 0.41\\ % inserting body of the table
+b & 0,50 & 0,14 & 0.09\\
+c & 0,45 &  0,17 & 0.11 \\
+d & 0,68 & 0,68 & 0.77 \\ 
+e & 0,95 & 0,95 & 0.36 \\ [1ex] % [ex] adds vertical space
+\hline %inserts single line
+\end{tabular}
+\label{table:figs} % is used to refer this table in the text
+\end{table}
+
+
+
+%As a recap, we semi-formally investigated the localised bi-dimensional approach for computing social support. Later, the result of this family of approaches (i.e. a bi-dimensional representation for each argument) will be utilised in a global manner by the system in order to associate each argument with the model evaluation.
+
+
+At the first glance it seems as once the theoretic foundation is defined, this class of methodologies should not impose a computational overhead to the existing system; since computing the solutions will still be the problem of finding the fix-point of the model equations which is only preceded by a different method for computing social support. 
+That being said, there are some significant pitfalls, sadly which oppose to the very nature of the incentives for using bi-dimensional representation:
+
+\begin{enumerate}
+\item Firstly, the choice of  a bi-dimensional representation makes sense the most for a particular context, where the domains of the vector components are not too restricted in their respective dimensions. So that potentially vector directions can point to every angle in the four quadrants of the cartesian space. In our example, we defined the system in a way that it assures the dimension regarding the size magnitude (x-axis) is alway non-negative. Assume the contrary; so that when an argument $a$ is attacked by a vector-force with a strong component in the x-axis, it may result to a negative $\tau(a_x)$ value. Users with bad intentions might exploit this notion in the following way: Suppose there is an argument $x$ that you want to defeat(see it's social support diminished). There are mainly two things that you will want to achieve: Firstly, trying to define as many attacks as you can. Followed by attempting to vote on these attacks as many times as possible. For our current topic of interest, it doesn't matter whether you can cast a high number of positive votes on the attack you defined. You are content as long as the total vote number increases. Because every vote casted on its attackers imposes a diminishing effect on $\tau(a_x)$, and since we allowed the component to obtain negative values, eventually the social support value, $\tau(a)$ might be decreased to a value point beyond recovery. On the other hand by restricting the domain of the component only to positive values, we are restricting the vector direction to two quadrants.
+
+\item We have stated that the component in the y-axis of the vectors stand for the relative measure of positive and negative votes; and indeed utilized the original social support definition. In Social Argumentation Frameworks, we prohibit arguments obtaining negative social support values, and behaving as direct supporters to the arguments that they attack as it gives a way to the exploitation of the system. In order to strengthen an argument a user has defined, she may simply introduce a set of illogical arguments and attack relations from these argument to her initial argument. The basic idea is provoking the community and gathering as many negative votes as possible, and thus creating a set of \textit{artificial} supporters for the desired argument. Preventing this type of behavior was exactly our motivation in defining the component of the y-axis as non-negative as well. That being said, by restraining the domain values from acquiring negative values, we also restrict the direction of vectors to a single quadrant, mainly the first quadrant of the 2D cartesian-space.
+
+\item Lastly, we should perhaps consider actions in 2D-space by their very nature. In very simple words, taking a step in the x-axis, and taking a step in y-axis are totally independent, orthogonal actions, whose results then can be interpreted in an aggregated way. However in our setting, even that they are processed in distinct way, both parameters that constitute the values of two dimensions are the same (i.e. $v^{+}$ and $v^{-}$ for a particular argument). Thus in our scenario, it does not seem as possible to claim the same orthogonal fundamentals with respect to definitions of our dimensions. 
+
+\end{enumerate}
+
+
+All in all,  this technical exercise has been beneficial in providing us one concrete method of model computation. Even if we decide on abandoning hybrid dimensions for good, a similar methodology may be adopted for other approaches such as the one depicted in Section 2.3. It also seems to do a good job in incorporating the magnitude of total number of votes in the final evaluation. 
+
+
+
+%\bibliographystyle{plain}
+%\bibliography{repJan14}
+
+\end{document}
