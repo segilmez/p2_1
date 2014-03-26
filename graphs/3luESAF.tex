@@ -1,0 +1,74 @@
+\begin{figure}[h!]
+  \centering
+    \subfloat[{}]{
+    \begin{tikzpicture}[>=latex, auto,
+node distance=0.8cm,
+mynode/.style={
+  circle,
+  draw,
+  fill=myyellow,
+  text centered}
+]
+\mynode{0.50}{d}{130/61} %67
+\mynode[right=of d]{0.34}{c}{54/66} %45
+\mynode[below=of c]{0.38}{a}{70/70} %5
+\mynode[left=of a]{0.38}{b}{70/70} %5
+\mynode[below right=of b]{0.71}{e}{19/1} %95
+
+\end{tikzpicture}
+    \label{subfig:socialsupport}
+    
+  } \hspace{0.2 cm}
+  \subfloat[{}]{
+\begin{tikzpicture}[>=latex, auto,
+node distance= 1.1 cm,
+mynode/.style={
+  circle,
+  draw,
+  fill=myyellow,
+  text centered}
+]
+\mynode[]{0.67}{d}{}
+\mynode[right=of d]{0.17}{c}{}
+\mynode[below=of c]{0.34}{a}{} 
+\mynode[left=of a]{0.14}{b}{} 
+\mynode[below right=of b]{0.95}{e}{}
+\draw [->] (d) to [bend left=45] node [pos=0.5, below, text width= 0.5cm] {0.9} (c);
+\draw [->] (c) to [bend left=45] node [pos=0.4, right, text width=0.9cm]{0.8} (a);
+\draw [->] (b) to [bend left=45] node [pos=0.7, above, text width=0.9cm]{0.7} (a);
+\draw [->] (a) to [bend left=45] node [pos=0.3, above, text width=0.9cm]{0.9} (b);
+\draw [->] (e) to [bend right=45] node [pos=0.5, right, text width=0.9cm]{0.1} (a);
+\draw [->] (d) to [bend right=45] node [pos=0.5, right, text width=0.5cm]{0.85} (b);
+ 
+\end{tikzpicture}
+    \label{subfig:smodel}
+  }  \hspace{-1 cm}
+  \subfloat[{}]{
+\begin{tikzpicture}[>=latex, auto,
+node distance= 1.1 cm,
+mynode/.style={
+  circle,
+  draw,
+  fill=myyellow,
+  text centered}
+]
+\mynode[]{0.77}{d}{}
+\mynode[right=of d]{0.11}{c}{}
+\mynode[below=of c]{0.41}{a}{} 
+\mynode[left=of a]{0.09}{b}{} 
+\mynode[below right=of b]{0.36}{e}{}
+\draw [->] (d) to [bend left=45] node [pos=0.5, below, text width= 0.5cm] {} (c);
+\draw [->] (c) to [bend left=45] node [pos=0.4, right, text width=0.9cm]{} (a);
+\draw [->] (b) to [bend left=45] node [pos=0.7, above, text width=0.9cm]{} (a);
+\draw [->] (a) to [bend left=45] node [pos=0.3, above, text width=0.9cm]{} (b);
+\draw [->] (e) to [bend right=45] node [pos=0.5, right, text width=0.9cm]{} (a);
+\draw [->] (d) to [bend right=45] node [pos=0.5, left, text width=0.5cm]{} (b);
+\end{tikzpicture}
+
+    \label{subfig:esafmodel}
+  }
+  
+  \caption{ Framework with arguments scaled according to social support (a),  ESAF-model of the debate(b),  Model of the vector representation(c)}
+ \label{fig:triple}
+ 
+\end{figure}

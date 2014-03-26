@@ -1,0 +1,109 @@
+% !TEX root = esaf.tex
+
+\begin{figure}[h!]
+  \centering
+    \subfloat[{}]{
+   \begin{tikzpicture}[
+node distance=0.8cm,
+mynode/.style={
+  circle,
+  draw,
+  fill=mylavender,
+  text centered}
+]
+\mynode[]{0.75}{a}{15/5} 
+\mynode[left=of a]{0.75}{b}{15/5}
+\mynode[left=of b]{0.5}{c}{5/5}  
+\draw [->] (b) to [] node [pos=0.4, above, text width=0.9cm]{} (a);
+\draw [->] (c) to [] node [pos=0.4, above, text width=0.9cm]{} (b);
+\end{tikzpicture}
+    \label{subfig:socialsupport}
+    
+  } \hspace{0.5 cm}
+  \subfloat[{}]{
+\begin{tikzpicture}[
+node distance= 1 cm,
+mynode/.style={
+  circle,
+  draw,
+  fill=mygreen,
+  text centered}
+]
+\mynode[]{0.468}{a}{} 
+\mynode[left=of a]{0.375}{b}{}
+\mynode[left=of b]{0.5}{c}{}  
+\draw [->] (b) to [] node [pos=0.4, above, text width=0.9cm]{} (a);
+\draw [->] (c) to [] node [pos=0.4, above, text width=0.9cm]{} (b);
+\end{tikzpicture}
+
+    \label{subfig:esafmodel}
+  }
+  
+  \caption{ Initial state with votes on arguments(left), Model evaluation under ESAF(right)  }
+ \label{fig:attacksOnAttacks}
+ 
+\end{figure}
+
+
+\begin{figure}[h!]
+  \centering
+    \subfloat[{}]{
+   \begin{tikzpicture}[
+node distance=0.8cm,
+mynode/.style={
+  circle,
+  draw,
+  fill=mylavender,
+  text centered}
+]
+\mynode[]{0.66}{a}{10/5} 
+\mynode[left=of a]{0.75}{b}{15/5}
+\mynode[left=of b]{0.66}{c}{10/5}  
+\draw [->] (b) to [] node [pos=0.4, above, text width=0.9cm]{} (a);
+\draw [->] (c) to [] node [pos=0.4, above, text width=0.9cm]{} (b);
+\end{tikzpicture}
+    \label{subfig:socialsupportAA}
+    
+  } \hspace{0.5 cm}
+  \subfloat[{}]{
+\begin{tikzpicture}[
+node distance= 1 cm,
+mynode/.style={
+  circle,
+  draw,
+  fill=mygreen,
+  text centered}
+]
+\mynode[]{0.492}{a}{} 
+\mynode[left=of a]{0.255}{b}{}
+\mynode[left=of b]{0.66}{c}{}  
+\draw [->] (b) to [] node [pos=0.4, above, text width=0.9cm]{} (a);
+\draw [->] (c) to [] node [pos=0.4, above, text width=0.9cm]{} (b);
+\end{tikzpicture}
+
+    \label{subfig:esafmodelAA}
+  }
+  
+  \caption{ Initial state with votes on arguments(left), Model evaluation under ESAF(right)  }
+ \label{fig:attacksOnAttacksB}
+ 
+\end{figure}
+
+
+\renewcommand{\tabcolsep}{0.3cm}
+\begin{table}[ht]
+  \caption{Model of the Social Abstract Argumentation Framework considering: 1a) social support only; 1b) model under ESAF; 2a) social support only(where 5 positive votes transferred from a to c); 2b) model under ESAF(where 5 positive votes transferred from a to c)\\}
+  \centering % used for centering table
+\begin{tabular}{c c c c c c} % centered columns (4 columns)
+\hline\hline %inserts double horizontal lines
+Figure &  Arg. a & Arg. b & Arg. c  \\ [0.7ex] % inserts table 
+%heading
+\hline % inserts single horizontal line
+1a & 0.750 & 0.750 & 0.500 \\ % inserting body of the table
+1b & 0,469 & 0,375 & 0,500 \\
+2a & 0,667 & 0,750 & 0,667 \\
+2b & 0,492 & 0,255 & 0,667 \\ [1ex] % [ex] adds vertical space
+\hline %inserts single line
+\end{tabular}
+\label{table:aa} % is used to refer this table in the text
+\end{table}
